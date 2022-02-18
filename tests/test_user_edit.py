@@ -1,9 +1,17 @@
+import allure
+
 from lib.base_case import BaseCase
 from lib.assertions import Assertions
 from lib.my_requests import MyRequests
 
 
+@allure.epic("Edit user cases")
 class TestUserEdit(BaseCase):
+    @allure.feature("Register", "Auth", "Edit", "Get")
+    @allure.title("Edit just created user")
+    @allure.description("This test registers a user and then edits")
+    @allure.step("Starting test test_edit_just_created_user")
+    @allure.severity(allure.severity_level.NORMAL)
     def test_edit_just_created_user(self):
         # REGISTER
         register_data = self.prepare_registration_data()
@@ -53,7 +61,12 @@ class TestUserEdit(BaseCase):
             "Wrong name of the user after edit"
         )
 
-    def test_edit_user_being_unauthorized(self):
+    @allure.feature("Edit")
+    @allure.title("Edit user without authorization")
+    @allure.description("This test tries to make changes to user data without authorization")
+    @allure.step("Starting test test_edit_user_without_authorization")
+    @allure.severity(allure.severity_level.CRITICAL)
+    def test_edit_user_without_authorization(self):
         new_name = "Changed Name"
 
         response = MyRequests.put(f"/user/26013", data={"firstName": new_name})
@@ -62,6 +75,11 @@ class TestUserEdit(BaseCase):
         assert response.content.decode(
             "utf-8") == "Auth token not supplied", f"Unexpected response content {response.content}"
 
+    @allure.feature("Auth", "Edit", "Get")
+    @allure.title("Edit user auth as another user")
+    @allure.description("This test logs in as one user and tries to edit another user")
+    @allure.step("Starting test test_edit_user_auth_as_another_user")
+    @allure.severity(allure.severity_level.CRITICAL)
     def test_edit_user_auth_as_another_user(self):
         # LOGIN
         # ID 26029
@@ -94,6 +112,11 @@ class TestUserEdit(BaseCase):
             "The username has changed. What shouldn't have been"
         )
 
+    @allure.feature("Auth", "Edit")
+    @allure.title("Edit user email")
+    @allure.description("This test edit user email to email without @")
+    @allure.step("Starting test test_edit_user_email")
+    @allure.severity(allure.severity_level.CRITICAL)
     def test_edit_user_email(self):
         # LOGIN
         data = {
@@ -120,6 +143,11 @@ class TestUserEdit(BaseCase):
         assert response2.content.decode(
             "utf-8") == f"Invalid email format", f"Unexpected response content {response2.content}"
 
+    @allure.feature("Auth", "Edit")
+    @allure.title("Edit user name")
+    @allure.description("This test edit user name to short name")
+    @allure.step("Starting test test_edit_user_name")
+    @allure.severity(allure.severity_level.MINOR)
     def test_edit_user_name(self):
         # LOGIN
         data = {

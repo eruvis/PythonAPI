@@ -1,9 +1,17 @@
+import allure
+
 from lib.assertions import Assertions
 from lib.base_case import BaseCase
 from lib.my_requests import MyRequests
 
 
+@allure.epic("Delete user cases")
 class TestUserDelete(BaseCase):
+    @allure.feature("Auth", "Delete")
+    @allure.title("Delete non-deleted user")
+    @allure.description("This test tries to delete a user that cannot be deleted")
+    @allure.step("Starting test test_delete_non_deleted_user")
+    @allure.severity(allure.severity_level.CRITICAL)
     def test_delete_non_deleted_user(self):
         # LOGIN
         data = {
@@ -27,6 +35,11 @@ class TestUserDelete(BaseCase):
         assert response2.content.decode("utf-8") == "Please, do not delete test users with ID 1, 2, 3, 4 or 5.", \
             f"Unexpected response content {response2.content}"
 
+    @allure.feature("Register", "Auth", "Delete", "Get")
+    @allure.title("Delete just created user")
+    @allure.description("This test registers a user and then deletes")
+    @allure.step("Starting test test_delete_just_created_user")
+    @allure.severity(allure.severity_level.CRITICAL)
     def test_delete_just_created_user(self):
         # REGISTER
         register_data = self.prepare_registration_data()
@@ -63,6 +76,11 @@ class TestUserDelete(BaseCase):
         Assertions.assert_code_status(response4, 404)
         assert response4.content.decode("utf-8") == "User not found", f"Unexpected response content {response4.content}"
 
+    @allure.feature("Register", "Auth", "Delete", "Get")
+    @allure.title("Delete user auth as another user")
+    @allure.description("This test logs in as one user and tries to delete another user")
+    @allure.step("Starting test test_delete_user_auth_as_another_user")
+    @allure.severity(allure.severity_level.CRITICAL)
     def test_delete_user_auth_as_another_user(self):
         # REGISTER
         register_data = self.prepare_registration_data()

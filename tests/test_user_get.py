@@ -1,9 +1,17 @@
+import allure
+
 from lib.base_case import BaseCase
 from lib.assertions import Assertions
 from lib.my_requests import MyRequests
 
 
+@allure.epic("Get user cases")
 class TestUserGet(BaseCase):
+    @allure.feature("Get")
+    @allure.title("Get user data not auth")
+    @allure.description("This test is getting user data without authorization")
+    @allure.step("Starting test test_get_user_details_not_auth")
+    @allure.severity(allure.severity_level.CRITICAL)
     def test_get_user_details_not_auth(self):
         response = MyRequests.get("/user/2")
 
@@ -12,6 +20,11 @@ class TestUserGet(BaseCase):
         Assertions.assert_json_has_not_key(response, "firstName")
         Assertions.assert_json_has_not_key(response, "lastName")
 
+    @allure.feature("Get", "Auth")
+    @allure.title("Get user data")
+    @allure.description("This test is getting user data")
+    @allure.step("Starting test test_get_user_details_auth_as_same_user")
+    @allure.severity(allure.severity_level.CRITICAL)
     def test_get_user_details_auth_as_same_user(self):
         data = {
             'email': 'vinkotov@example.com',
@@ -32,6 +45,11 @@ class TestUserGet(BaseCase):
         expected_fields = ["username", "email", "firstName", "lastName"]
         Assertions.assert_json_has_keys(response2, expected_fields)
 
+    @allure.feature("Get", "Auth")
+    @allure.title("Get user data auth as another user")
+    @allure.description("This test logs in as one user and tries to get data another user")
+    @allure.step("Starting test test_get_user_details_auth_as_another_user")
+    @allure.severity(allure.severity_level.CRITICAL)
     def test_get_user_details_auth_as_another_user(self):
         data = {
             'email': 'vinkotov@example.com',
