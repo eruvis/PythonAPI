@@ -5,6 +5,8 @@ from requests import Response
 
 
 class Logger:
+    if not os.path.exists("logs"):
+        os.mkdir("logs")
     file_name = f"logs/log_" + str(datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")) + ".log"
 
     @classmethod
